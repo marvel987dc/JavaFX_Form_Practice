@@ -1,10 +1,9 @@
-package com.example.juanbarrero_comp228lab4;
+package exercise_1;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -12,7 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
-public class HelloApplication extends Application {
+public class formApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
 
@@ -85,11 +84,20 @@ public class HelloApplication extends Application {
         selectedList.setPrefHeight(100);
         selectedList.setPrefWidth(200);
 
+
         courses.setOnAction(e -> {
             if (courses.getValue() != null) {
                 selectedList.getItems().add(courses.getValue());
             }
         });
+
+        rightPane.setStyle(
+                "-fx-border-color: black; " +
+                        "-fx-border-width: 1; " +
+                        "-fx-border-radius: 5; " +
+                        "-fx-padding: 10;"
+        );
+
 
         rightPane.getChildren().addAll(ComputerBusiness, courses, new Label("Selected Courses"), selectedList);
 
@@ -109,17 +117,20 @@ public class HelloApplication extends Application {
         mainPane.setBottom(bottomPane);
 
         Display.setOnAction(e -> {
-            textArea.setText("Name: " + nameField.getText() + "\n" +
-                    "Address: " + addressField.getText() + "\n" +
-                    "Province: " + provinceField.getText() + "\n" +
-                    "City: " + cityField.getText() + "\n" +
-                    "Postal Code: " + postalCodeField.getText() + "\n" +
-                    "Phone Number: " + phoneNumberField.getText() + "\n" +
-                    "Email: " + emailField.getText() + "\n" +
-                    "Selected Course: " + selectedList.getItems() + "\n" +
-                    "Student Council: " + councilCheckBox.isSelected() + "\n" +
-                    "Volunteer Work: " + volunteerWorkCheckBox.isSelected());
+            if (validateForm(nameField, addressField, provinceField, cityField, postalCodeField, phoneNumberField, emailField, courses)) {
+                textArea.setText("Name: " + nameField.getText() + "\n" +
+                        "Address: " + addressField.getText() + "\n" +
+                        "Province: " + provinceField.getText() + "\n" +
+                        "City: " + cityField.getText() + "\n" +
+                        "Postal Code: " + postalCodeField.getText() + "\n" +
+                        "Phone Number: " + phoneNumberField.getText() + "\n" +
+                        "Email: " + emailField.getText() + "\n" +
+                        "Selected Course: " + selectedList.getItems() + "\n" +
+                        "Student Council: " + councilCheckBox.isSelected() + "\n" +
+                        "Volunteer Work: " + volunteerWorkCheckBox.isSelected());
+            }
         });
+
 
         Scene scene = new Scene(mainPane, 650, 550);
         primaryStage.setTitle("Student Information Form");
@@ -127,6 +138,30 @@ public class HelloApplication extends Application {
         primaryStage.show();
 
     }
+
+    private boolean validateForm(TextField nameField, TextField addressField, TextField provinceField,
+                                 TextField cityField, TextField postalCodeField, TextField phoneNumberField,
+                                 TextField emailField, ComboBox<String> courses) {
+        if (nameField.getText().isEmpty() || addressField.getText().isEmpty() ||
+                provinceField.getText().isEmpty() || cityField.getText().isEmpty() ||
+                postalCodeField.getText().isEmpty() || phoneNumberField.getText().isEmpty() ||
+                emailField.getText().isEmpty() || courses.getValue() == null) {
+
+            showAlert("Please fill out all fields");
+            return false;
+        }
+        return true;
+    }
+
+    // Helper method to show alert messages
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     private void loadCourses(ComboBox<String> courses, String course) {
         courses.getItems().clear();
