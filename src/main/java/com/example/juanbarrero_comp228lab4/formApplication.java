@@ -1,4 +1,4 @@
-package exercise_1;
+package com.example.juanbarrero_comp228lab4;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -95,7 +95,8 @@ public class formApplication extends Application {
                 "-fx-border-color: black; " +
                         "-fx-border-width: 1; " +
                         "-fx-border-radius: 5; " +
-                        "-fx-padding: 10;"
+                        "-fx-padding: 10;" +
+                "-fx-background-color: #ffffff;"
         );
 
 
@@ -142,6 +143,7 @@ public class formApplication extends Application {
     private boolean validateForm(TextField nameField, TextField addressField, TextField provinceField,
                                  TextField cityField, TextField postalCodeField, TextField phoneNumberField,
                                  TextField emailField, ComboBox<String> courses) {
+
         if (nameField.getText().isEmpty() || addressField.getText().isEmpty() ||
                 provinceField.getText().isEmpty() || cityField.getText().isEmpty() ||
                 postalCodeField.getText().isEmpty() || phoneNumberField.getText().isEmpty() ||
@@ -150,10 +152,25 @@ public class formApplication extends Application {
             showAlert("Please fill out all fields");
             return false;
         }
+
+        if (!phoneNumberField.getText().matches("\\d+")) {
+            showAlert("Phone number must be digits only");
+            return false;
+        }
+
+        if (!emailField.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            showAlert("Invalid email address");
+            return false;
+        }
+
+        if(!nameField.getText().matches("^[a-zA-Z\\s]*$")){
+            showAlert("Name must contain only letters");
+            return false;
+        }
+
         return true;
     }
 
-    // Helper method to show alert messages
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
